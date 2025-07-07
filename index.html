@@ -292,6 +292,7 @@
             <button class="tab" onclick="showTab('review')">Review</button>
             <button class="tab" onclick="showTab('story')">Story</button>
             <button class="tab" onclick="showTab('article')">Article</button>
+            <button class="tab" onclick="showTab('email')">Email</button>
         </div>
 
         <div id="essay" class="tab-content active">
@@ -609,6 +610,79 @@
             </div>
         </div>
 
+        <div id="email" class="tab-content">
+            <div class="section">
+                <h3>Greeting</h3>
+                <p>Start with a friendly and appropriate greeting depending on formality.</p>
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>Dear [Name],</li>
+                        <li>Hi [Name],</li>
+                        <li>Hello,</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Opening Paragraph</h3>
+                <ul>
+                    <li>Say why you're writing</li>
+                    <li>Refer to the previous email or context</li>
+                    <li>Keep it polite and friendly</li>
+                </ul>
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>Thanks for your email.</li>
+                        <li>I'm writing to...</li>
+                        <li>It was great to hear from you.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Main Body (1–2 paragraphs)</h3>
+                <p>Give details, respond to questions, or provide information. Keep it clear and relevant.</p>
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>As you asked, here is...</li>
+                        <li>Just to let you know...</li>
+                        <li>Let me explain...</li>
+                        <li>If you need more information, feel free to ask.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Closing Paragraph</h3>
+                <p>Wrap up the message and mention any follow-up or next steps.</p>
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>Looking forward to your reply.</li>
+                        <li>Let me know what you think.</li>
+                        <li>Hope to hear from you soon!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Sign-off</h3>
+                <p>Choose a closing that matches the tone of your email.</p>
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>Best wishes,</li>
+                        <li>Kind regards,</li>
+                        <li>Take care,</li>
+                        <li>Yours sincerely,</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <div class="quick-reference">
             <h2>Quick Reference Guide</h2>
             
@@ -630,7 +704,12 @@
                 
                 <div class="reference-item">
                     <h3>Article</h3>
-                    <p>Engaging tone • Hook readers • Personal experience • Clear opinion</p>
+                    <p>Engaging tone • Catchy title & opening • Personal angle • Clear structure</p>
+                </div>
+
+                <div class="reference-item">
+                    <h3>Email</h3>
+                    <p>Semi-formal or informal • Clear structure • Purposeful tone • Polite closing</p>
                 </div>
             </div>
         </div>
@@ -650,7 +729,7 @@
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-                const tabs = ['essay', 'review', 'story', 'article'];
+                const tabs = ['essay', 'review', 'story', 'article', 'email'];
                 const activeTab = document.querySelector('.tab.active').getAttribute('onclick').match(/'(.+)'/)[1];
                 const currentIndex = tabs.indexOf(activeTab);
                 
