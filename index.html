@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCE Writing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #e9ecef;
+            background-color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #2d3748;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4a5568;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #f7fafc;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #a0aec0;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #4a5568;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #a0aec0;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: #e2e8f0;
+            background-color: #4a5568;
+        }
+
+        .tab.active {
+            color: #f7fafc;
+            border-bottom-color: #63b3ed;
+            font-weight: 500;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 1px solid #4a5568;
+            border-radius: 8px;
+            background: #374151;
+        }
+
+        .section h3 {
+            color: #f7fafc;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .section p {
+            margin-bottom: 10px;
+            color: #cbd5e0;
+        }
+
+        .section ul {
+            margin-left: 20px;
+            color: #cbd5e0;
+        }
+
+        .section li {
+            margin-bottom: 5px;
+        }
+
+        .phrases {
+            background: #2d3748;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #63b3ed;
+        }
+
+        .phrases h4 {
+            color: #f7fafc;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .phrases ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .phrases li {
+            margin: 8px 0;
+            padding-left: 15px;
+            position: relative;
+            color: #cbd5e0;
+        }
+
+        .phrases li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #63b3ed;
+            font-weight: bold;
+        }
+   
+        .example {
+            background: #553c2c;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #f6ad55;
+        }
+
+        .example h4 {
+            color: #fbd38d;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .example p {
+            color: #fbd38d;
+            font-style: italic;
+        }
+
+        .tips {
+            background: #2c5282;
+            border: 1px solid #3182ce;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .tips h4 {
+            color: #bee3f8;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .tips ul {
+            color: #bee3f8;
+            margin-left: 20px;
+        }
+
+        .tips li {
+            margin: 8px 0;
+        }
+
+        .quick-reference {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 250px;
+            background: #1a202c;
+            border: 1px solid #4a5568;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            z-index: 1000;
+        }
+
+        .quick-reference h2 {
+            color: #f7fafc;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .reference-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .reference-item {
+            background: #2d3748;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #4a5568;
+            border-left: 4px solid #63b3ed;
+        }
+
+        .reference-item h3 {
+            color: #f7fafc;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .reference-item p {
+            color: #a0aec0;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 1300px) {
+            .quick-reference {
+                position: static;
+                width: 100%;
+                transform: none;
+                margin-top: 40px;
+            }
+            
+            .reference-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FCE Writing</h1>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('essay')">Essay</button>
+            <button class="tab" onclick="showTab('review')">Review</button>
+            <button class="tab" onclick="showTab('story')">Story</button>
+            <button class="tab" onclick="showTab('article')">Article</button>
+        </div>
+
+        <div id="essay" class="tab-content active">
+            <div class="section">
+                <h3>Introduction (1 paragraph)</h3>
+                <ul>
+                    <li>Paraphrase the topic or question</li>
+                    <li>Say what the essay will discuss</li>
+                    <li>Mention the two or three main points</li>
+                </ul>
+                
+                <div class="example">
+                    <h4>Example:</h4>
+                    <p>Many people believe that learning a second language is essential nowadays. In this essay, I will discuss the benefits of learning another language and whether schools should make it compulsory.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>First Main Point (1 paragraph)</h3>
+                <p>Start with a clear topic sentence and support with reasons, examples, or explanations.</p>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>Firstly, ...</li>
+                        <li>One important reason is that...</li>
+                        <li>For example, ...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Second Main Point (1 paragraph)</h3>
+                <p>Introduce the next idea clearly and support it with reasons or examples.</p>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>Secondly, ...</li>
+                        <li>Another important point is...</li>
+                        <li>This means that...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Optional Third Main Point (1 paragraph)</h3>
+                <p>Add a contrasting point or another supporting argument if needed.</p>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>Finally, ...</li>
+                        <li>On the other hand, ...</li>
+                        <li>However, some people believe that...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Conclusion (1 paragraph)</h3>
+                <ul>
+                    <li>Summarize the main points</li>
+                    <li>Give your opinion (if asked)</li>
+                    <li>Do not add new information</li>
+                </ul>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>In conclusion, ...</li>
+                        <li>To sum up, ...</li>
+                        <li>Personally, I believe that...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="review" class="tab-content">
+            <div class="section">
+                <h3>Introduction (1 paragraph)</h3>
+                <ul>
+                    <li>Give basic information about what you're reviewing (title, creator, type)</li>
+                    <li>Briefly explain what it's about and your overall impression</li>
+                </ul>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>The [book/movie/game/etc.] [Title], created by [Name], is about...</li>
+                        <li>Overall, I found it to be...</li>
+                        <li>In this review, I will talk about...</li>
+                    </ul>
+                </div>
+
+                <div class="example">
+                    <h4>Example:</h4>
+                    <p>"Hollow Knight" is an indie metroidvania game developed by Team Cherry. It follows a mysterious warrior exploring a fallen insect kingdom. In this review, I'll talk about its atmosphere, gameplay, and why I think it stands out among indie titles.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Strengths (1 paragraph)</h3>
+                <p>Discuss one or two things you really liked. Be specific with examples.</p>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>One of the best things about this [item] is...</li>
+                        <li>For example, the [graphics/dialogue/characters] really stood out</li>
+                        <li>Another strong point is...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Weaknesses or Criticism (1 paragraph)</h3>
+                <p>Mention anything that didn't work for you or could be improved.</p>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>However, I found that...</li>
+                        <li>One thing that could have been better is...</li>
+                        <li>Some people might find that...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Optional Additional Thoughts (1 paragraph)</h3>
+                <p>Include a personal reflection, comparison with similar titles, or something unique.</p>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>Compared to other [games/books/etc.], this one...</li>
+                        <li>What makes it different is...</li>
+                        <li>Personally, I also enjoyed...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Conclusion (1 paragraph)</h3>
+                <p>Summarize your overall opinion and say whether you'd recommend it.</p>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>In conclusion, I think...</li>
+                        <li>I would recommend this to...</li>
+                        <li>Overall, it's a [fun/thought-provoking/well-made] experience</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="story" class="tab-content">
+            <div class="section">
+                <h3>Introduction/Beginning (1 paragraph)</h3>
+                <ul>
+                    <li>Set the scene and introduce main character(s)</li>
+                    <li>Hint at the problem or situation they'll face</li>
+                </ul>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>It was a [cold/sunny/strange] day when...</li>
+                        <li>[Character name] had no idea that today would change everything</li>
+                        <li>The story begins in a [place] where...</li>
+                    </ul>
+                </div>
+
+                <div class="example">
+                    <h4>Example:</h4>
+                    <p>It was a rainy afternoon when Mia found the old, locked box in her grandmother's attic. She didn't know it yet, but opening it would lead to a discovery no one could have imagined.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Build-Up/Rising Action (1-2 paragraphs)</h3>
+                <ul>
+                    <li>Describe what happens next</li>
+                    <li>Build tension or curiosity</li>
+                    <li>Introduce the problem or challenge</li>
+                </ul>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>Everything seemed normal until...</li>
+                                                <li>Suddenly, [something unexpected] happened</li>
+                        <li>As time passed, [character] began to realize...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Climax (1 paragraph)</h3>
+                <ul>
+                    <li>The most exciting or intense part of the story</li>
+                    <li>Describe how the character faces the challenge or problem</li>
+                </ul>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>At that moment,...</li>
+                        <li>[Character] knew there was no turning back</li>
+                        <li>With a deep breath, [he/she/they]...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Falling Action (1 paragraph)</h3>
+                <ul>
+                    <li>Describe what happens after the climax</li>
+                    <li>How does the character begin to solve things or return to normal?</li>
+                </ul>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>After that,...</li>
+                        <li>Things slowly began to change</li>
+                        <li>[Character] had learned...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Conclusion/Ending (1 paragraph)</h3>
+                <ul>
+                    <li>Wrap up the story</li>
+                    <li>Show what changed or what the character learned</li>
+                </ul>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>In the end,...</li>
+                        <li>From that day on,...</li>
+                        <li>[Character] would never forget...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="article" class="tab-content">
+            <div class="section">
+                <h3>Title</h3>
+                <p>Make it catchy and related to the topic. Try to grab the reader's attention.</p>
+                
+                <div class="example">
+                    <h4>Examples:</h4>
+                    <p>• Why Everyone Should Try Volunteering<br>
+                    • My Most Unforgettable Travel Experience<br>
+                    • Are Smartphones Ruining Our Lives?</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Introduction - Hook the Reader</h3>
+                <p>Start with a question, surprising fact, or bold opinion. Introduce the topic engagingly.</p>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>Have you ever wondered...?</li>
+                        <li>These days, many people...</li>
+                        <li>It's hard to imagine life without...</li>
+                        <li>In this article, I'll share...</li>
+                    </ul>
+                </div>
+
+                <div class="example">
+                    <h4>Example:</h4>
+                    <p>Have you ever wondered what it's like to live without your phone for a week? I did it, and it completely changed the way I see technology.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Main Body (2-3 paragraphs)</h3>
+                <p>Discuss your main points: personal experience, pros and cons, opinions, examples. Keep it informal or semi-formal. Use engaging language and direct questions to involve the reader.</p>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>One of the best things about...</li>
+                        <li>The worst part was...</li>
+                        <li>For example,...</li>
+                        <li>What's more,...</li>
+                        <li>Another reason is...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Conclusion - Give Your Opinion</h3>
+                <p>Wrap up with a strong final thought. Say what you learned or what you'd recommend.</p>
+                
+                <div class="phrases">
+                    <h4>Useful Phrases:</h4>
+                    <ul>
+                        <li>All in all,...</li>
+                        <li>To sum up,...</li>
+                        <li>In my opinion,...</li>
+                        <li>I would definitely recommend...</li>
+                        <li>If you ever get the chance,...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tips">
+                <h4>FCE Article Tips:</h4>
+                <ul>
+                    <li>Be engaging – write as if for a school magazine or blog</li>
+                    <li>Use rhetorical questions, exclamations, and interesting vocabulary</li>
+                    <li>Stick to the word count (140–190 words)</li>
+                    <li>Keep the tone informal or neutral, not too formal</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quick-reference">
+            <h2>Quick Reference Guide</h2>
+            
+            <div class="reference-grid">
+                <div class="reference-item">
+                    <h3>Essay</h3>
+                    <p>Formal tone • Academic structure • Clear arguments • Evidence-based</p>
+                </div>
+                
+                <div class="reference-item">
+                    <h3>Review</h3>
+                    <p>Semi-formal • Critical analysis • Balanced perspective • Recommendation</p>
+                </div>
+                
+                <div class="reference-item">
+                    <h3>Story</h3>
+                    <p>Narrative flow • Character development • Descriptive language • Plot structure</p>
+                </div>
+                
+                <div class="reference-item">
+                    <h3>Article</h3>
+                    <p>Engaging tone • Hook readers • Personal experience • Clear opinion</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                const tabs = ['essay', 'review', 'story', 'article'];
+                const activeTab = document.querySelector('.tab.active').getAttribute('onclick').match(/'(.+)'/)[1];
+                const currentIndex = tabs.indexOf(activeTab);
+                
+                let nextIndex;
+                if (e.key === 'ArrowRight') {
+                    nextIndex = (currentIndex + 1) % tabs.length;
+                } else {
+                    nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                }
+                
+                showTab(tabs[nextIndex]);
+            }
+        });
+    </script>
+</body>
+</html>
+
