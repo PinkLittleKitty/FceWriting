@@ -573,17 +573,16 @@
         }
 
         function gradeWriting() {
+            startTime = performance.now();
             const text = writingText.value.trim();
             const task = taskType.value;
-            
             if (!text) {
                 showNotification('Please enter some text to grade.');
                 return;
             }
-                        gradeButton.disabled = true;
+            gradeButton.disabled = true;
             gradeButton.textContent = 'Grading...';
             results.innerHTML = '<div class="loading">Analyzing your writing...</div>';
-
             setTimeout(() => {
                 const evaluation = evaluateWriting(text, task);
                 displayResults(evaluation);
@@ -595,11 +594,13 @@
         }
 
         function evaluateWriting(text, taskType) {
+            text = String(text || '');
+
             const words = text.split(/\s+/).length;
             const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
             const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0).length;
-            
-            const avgWordsPerSentence = words / sentences;
+
+            const avgWordsPerSentence = sentences > 0 ? words / sentences : 0;
 
             const criteria = {
                 content: evaluateContent(text, taskType, words, paragraphs),
@@ -610,8 +611,8 @@
             };
 
             const overallScore = Math.round(
-                (criteria.content.score + criteria.organization.score + 
-                 criteria.language.score + criteria.accuracy.score + criteria.taskSpecific.score) / 5
+                (criteria.content.score + criteria.organization.score +
+                criteria.language.score + criteria.accuracy.score + criteria.taskSpecific.score) / 5
             );
 
             const readabilityFeedback = evaluateReadability(text);
@@ -623,7 +624,8 @@
                 wordCount: words,
                 recommendedRange: getRecommendedWordCount(taskType),
                 readability: readabilityFeedback,
-                analysis: detailedAnalysis
+                analysis: detailedAnalysis,
+                originalText: text
             };
         }
 
@@ -854,6 +856,8 @@
         }
 
         function evaluateContent(text, taskType, words, paragraphs) {
+            text = String(text || '')
+
             let score = 3.5;
             let feedback = [];
 
@@ -887,7 +891,48 @@
             };
         }
 
+        function evaluateCohesion(text) {
+            text = String(text || '')
+
+            const transitionWords = ['however', 'therefore', 'moreover', 'furthermore', 'in addition'];
+            let score = 4.0;
+            let feedback = [];
+            let issues = [];
+            let highlights = [];
+
+            transitionWords.forEach(word => {
+                const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                const matches = text.match(regex);
+                if (matches) {
+                    const count = matches.length;
+                    score += 0.1 * count;
+                    highlights.push({
+                        start: regex.lastIndex - word.length,
+                        end: regex.lastIndex,
+                        message: `Good use of transition word: "${word}"`,
+                        type: 'cohesion'
+                    });
+                }
+            });
+
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            if (sentences.length < 3) {
+                score -= 0.5;
+                feedback.push('Consider adding more sentences to improve coherence.');
+            } else {
+                feedback.push('Good sentence variety and structure.');
+            }
+
+            return {
+                score: Math.max(1, Math.min(5, score)),
+                feedback: feedback.join(' '),
+                highlights: highlights
+            };
+        }
+
         function evaluateOrganization(text, paragraphs, sentences) {
+            text = String(text || '')
+
             let score = 3.5;
             let feedback = [];
 
@@ -940,6 +985,8 @@
         }
 
         function evaluateLanguage(text, avgWordsPerSentence) {
+            text = String(text || '')
+
             let score = 3.5;
             let feedback = [];
 
@@ -1008,33 +1055,40 @@
         }
 
         function evaluateGrammarAndStyle(text) {
-            let score = 4.2;
+            text = String(text || '')
+
+            let score = 4.0;
             let feedback = [];
             let issues = [];
+            let highlights = [];
 
             const grammarChecks = [
-                { pattern: /\balot\b/gi, suggestion: "a lot", severity: 0.15 },
-                { pattern: /\b(could of|should of|would of)\b/gi, suggestion: "could have/should have/would have", severity: 0.25 },
-                { pattern: /\b(your)\s+(going|coming|doing)\b/gi, suggestion: "you're", severity: 0.15 },
-                { pattern: /\b(loose)\s+(something|it|them)\b/gi, suggestion: "lose", severity: 0.1 },
-                { pattern: /\b(affect)\s+(on)\b/gi, suggestion: "effect on", severity: 0.15 },
-                { pattern: /[.!?]\s*[a-z]/g, suggestion: "Capitalize after punctuation", severity: 0.05 },
-                { pattern: /\bi\b/g, suggestion: "Remember to capitalize 'I'", severity: 0.05 },
-                { pattern: /\s{2,}/g, suggestion: "Check for extra spaces", severity: 0.02 },
-                { pattern: /\b(there|their|they're)\b.*\b(there|their|they're)\b/gi, suggestion: "Check there/their/they're usage", severity: 0.1 },
-                { pattern: /\b(its|it's)\b.*\b(its|it's)\b/gi, suggestion: "Check its/it's usage", severity: 0.1 }
+                { pattern: /\balot\b/gi, suggestion: "a lot", severity: 0.15, type: 'grammar' },
+                { pattern: /\b(could of|should of|would of)\b/gi, suggestion: "could have/should have/would have", severity: 0.25, type: 'grammar' },
+                { pattern: /\b(your)\s+(going|coming|doing)\b/gi, suggestion: "you're", severity: 0.15, type: 'grammar' },
+                { pattern: /\b(loose)\s+(something|it|them)\b/gi, suggestion: "lose", severity: 0.1, type: 'grammar' },
+                { pattern: /\b(affect)\s+(on)\b/gi, suggestion: "effect on", severity: 0.15, type: 'grammar' },
+                { pattern: /\bi\b/g, suggestion: "Remember to capitalize 'I'", severity: 0.05, type: 'grammar' },
+                { pattern: /\b(there|their|they're)\b.*\b(there|their|they're)\b/gi, suggestion: "Check there/their/they're usage", severity: 0.1, type: 'grammar' },
+                { pattern: /\b(its|it's)\b.*\b(its|it's)\b/gi, suggestion: "Check its/it's usage", severity: 0.1, type: 'grammar' },
+                { pattern: /\b(very|really|quite)\s+(good|bad|nice)\b/gi, suggestion: "Consider stronger adjectives", severity: 0.05, type: 'vocabulary' }
             ];
 
             let totalErrors = 0;
             grammarChecks.forEach(check => {
-                const matches = text.match(check.pattern);
-                if (matches) {
-                    const errorCount = matches.length;
+                let match;
+                const regex = new RegExp(check.pattern, 'gi');
+                while ((match = regex.exec(text)) !== null) {
+                    const errorCount = 1;
                     totalErrors += errorCount;
                     score -= check.severity * errorCount;
-                    if (errorCount > 0) {
-                        issues.push(`${errorCount} instance(s) of ${check.suggestion.toLowerCase()}`);
-                    }
+                    issues.push(`${check.suggestion.toLowerCase()} (found at "${match[0]}")`);
+                    highlights.push({
+                        start: match.index,
+                        end: match.index + match[0].length,
+                        message: check.suggestion,
+                        type: check.type
+                    });
                 }
             });
 
@@ -1066,7 +1120,8 @@
 
             return {
                 score: Math.max(1, Math.min(5, score)),
-                feedback: feedback.concat(issues).join(' ')
+                feedback: feedback.concat(issues).join(' '),
+                highlights: highlights
             };
         }
 
@@ -1097,6 +1152,8 @@
         }
 
         function evaluateReadability(text) {
+            text = String(text || '')
+
             const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
             const words = text.split(/\s+/).length;
             const syllables = estimateSyllables(text);
@@ -1117,6 +1174,52 @@
             }
             
             return readabilityFeedback;
+        }
+
+        function evaluateVocabulary(text) {
+            text = String(text || '')
+
+            const commonWords = ['good', 'bad', 'nice', 'very', 'really'];
+            const suggestions = {
+                'good': ['excellent', 'superb', 'outstanding'],
+                'bad': ['poor', 'subpar', 'unfavorable'],
+                'nice': ['pleasant', 'agreeable', 'delightful'],
+                'very': ['extremely', 'exceptionally', 'incredibly'],
+                'really': ['truly', 'genuinely', 'actually']
+            };
+
+            let score = 4.0;
+            let feedback = [];
+            let issues = [];
+            let highlights = [];
+
+            commonWords.forEach(word => {
+                const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                const matches = text.match(regex);
+                if (matches) {
+                    const count = matches.length;
+                    score -= 0.1 * count;
+                    issues.push(`Consider using a more varied word instead of "${word}" (${count} occurrences)`);
+                    highlights.push({
+                        start: regex.lastIndex - word.length,
+                        end: regex.lastIndex,
+                        message: `Consider alternatives: ${suggestions[word].join(', ')}`,
+                        type: 'vocabulary'
+                    });
+                }
+            });
+
+            if (issues.length === 0) {
+                feedback.push('Great vocabulary usage with a good variety of words.');
+            } else {
+                feedback.push('Try to use a wider range of vocabulary to enhance your writing.');
+            }
+
+            return {
+                score: Math.max(1, Math.min(5, score)),
+                feedback: feedback.join(' '),
+                highlights: highlights
+            };
         }
 
         function estimateSyllables(text) {
@@ -1549,7 +1652,6 @@ Sam`
             updateWordCount();
             showNotification(`Sample ${selectedSample} loaded! Click "Grade My Writing" to see evaluation.`);
             
-            // Reset selector
             sampleSelector.value = '';
         }
 
@@ -1635,11 +1737,6 @@ Sam`
         addTooltips();
 
         let startTime;
-        const originalGradeWriting = gradeWriting;
-        gradeWriting = function() {
-            startTime = performance.now();
-            originalGradeWriting();
-        };
 
         const originalDisplayResults = displayResults;
         displayResults = function(evaluation) {
