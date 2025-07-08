@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCE Writing Grader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #e9ecef;
+            background-color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #2d3748;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4a5568;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #f7fafc;
+            font-weight: 600;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: #4a5568;
+            color: #f7fafc;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .back-link:hover {
+            background: #63b3ed;
+        }
+
+        .grader-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .writing-input {
+            background: #374151;
+            border-radius: 8px;
+            padding: 25px;
+            border: 1px solid #4a5568;
+        }
+
+        .task-selector {
+            margin-bottom: 20px;
+        }
+
+        .task-selector label {
+            display: block;
+            margin-bottom: 8px;
+            color: #f7fafc;
+            font-weight: 500;
+        }
+
+        .task-selector select {
+            width: 100%;
+            padding: 10px;
+            background: #2d3748;
+            border: 1px solid #4a5568;
+            border-radius: 6px;
+            color: #e9ecef;
+            font-size: 1rem;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 400px;
+            padding: 15px;
+            background: #2d3748;
+            border: 1px solid #4a5568;
+            border-radius: 6px;
+            color: #e9ecef;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #63b3ed;
+        }
+
+        .word-count {
+            margin-top: 10px;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        .grade-button {
+            width: 100%;
+            padding: 15px;
+            background: #63b3ed;
+            color: #1a202c;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.2s ease;
+        }
+
+        .grade-button:hover {
+            background: #4299e1;
+        }
+
+        .grade-button:disabled {
+            background: #4a5568;
+            color: #a0aec0;
+            cursor: not-allowed;
+        }
+
+        .results-panel {
+            background: #374151;
+            border-radius: 8px;
+            padding: 25px;
+            border: 1px solid #4a5568;
+        }
+
+        .overall-score {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #2d3748;
+            border-radius: 8px;
+            border: 2px solid #63b3ed;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #63b3ed;
+            margin-bottom: 10px;
+        }
+
+        .score-label {
+            color: #f7fafc;
+            font-size: 1.2rem;
+        }
+
+        .criteria-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .criterion {
+            background: #2d3748;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #63b3ed;
+        }
+
+        .criterion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .criterion-name {
+            color: #f7fafc;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .criterion-score {
+            background: #63b3ed;
+            color: #1a202c;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .criterion-feedback {
+            color: #cbd5e0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .feedback-positive {
+            color: #68d391;
+        }
+
+        .feedback-negative {
+            color: #fc8181;
+        }
+
+        .feedback-neutral {
+            color: #fbd38d;
+        }
+
+        .loading {
+            text-align: center;
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        @media (max-width: 1024px) {
+            .grader-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .text-input {
+                min-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← Back to Guide</a>
+            <h1>FCE Writing Grader</h1>
+        </header>
+
+        <div class="grader-container">
+            <div class="writing-input">
+                <div class="task-selector">
+                    <label for="taskType">Select Writing Task:</label>
+                    <select id="taskType">
+                        <option value="essay">Essay</option>
+                        <option value="review">Review</option>
+                        <option value="story">Story</option>
+                        <option value="article">Article</option>
+                        <option value="email">Email/Letter</option>
+                    </select>
+                </div>
+
+                <div class="sample-texts" style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #f7fafc; font-weight: 500;">Try a sample:</label>
+                    <button id="loadSample" class="sample-button" style="padding: 8px 15px; background: #4a5568; color: #f7fafc; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">Load Sample Review</button>
+                </div>
+
+                <textarea 
+                    id="writingText" 
+                    class="text-input" 
+                    placeholder="Paste your writing here for evaluation..."
+                ></textarea>
+                
+                <div class="word-count">
+                    Word count: <span id="wordCount">0</span> words
+                </div>
+
+                <button id="gradeButton" class="grade-button">Grade My Writing</button>
+            </div>
+
+            <div class="results-panel">
+                <div id="results" class="loading">
+                    Enter your writing and click "Grade My Writing" to see your evaluation.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const writingText = document.getElementById('writingText');
+        const wordCount = document.getElementById('wordCount');
+        const gradeButton = document.getElementById('gradeButton');
+        const results = document.getElementById('results');
+        const taskType = document.getElementById('taskType');
+
+        writingText.addEventListener('input', updateWordCount);
+        gradeButton.addEventListener('click', gradeWriting);
+
+        function updateWordCount() {
+            const text = writingText.value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            wordCount.textContent = words;
+        }
+
+        function gradeWriting() {
+            const text = writingText.value.trim();
+            const task = taskType.value;
+            
+            if (!text) {
+                alert('Please enter some text to grade.');
+                return;
+            }
+
+            gradeButton.disabled = true;
+            gradeButton.textContent = 'Grading...';
+            results.innerHTML = '<div class="loading">Analyzing your writing...</div>';
+
+            setTimeout(() => {
+                const evaluation = evaluateWriting(text, task);
+                displayResults(evaluation);
+                gradeButton.disabled = false;
+                gradeButton.textContent = 'Grade My Writing';
+            }, 1500);
+        }
+
+        function evaluateWriting(text, taskType) {
+            const words = text.split(/\s+/).length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0).length;
+            
+            const avgWordsPerSentence = words / sentences;
+            const avgSentencesPerParagraph = sentences / paragraphs;
+
+            const criteria = {
+                content: evaluateContent(text, taskType, words, paragraphs),
+                organization: evaluateOrganization(text, paragraphs, sentences),
+                language: evaluateLanguage(text, avgWordsPerSentence),
+                accuracy: evaluateAccuracy(text)
+            };
+
+            const overallScore = Math.round(
+                (criteria.content.score + criteria.organization.score + 
+                 criteria.language.score + criteria.accuracy.score) / 4
+            );
+
+            return {
+                overallScore,
+                criteria,
+                wordCount: words,
+                recommendedRange: getRecommendedWordCount(taskType)
+            };
+        }
+
+        function evaluateContent(text, taskType, words, paragraphs) {
+            let score = 3;
+            let feedback = [];
+
+            const recommendedRange = getRecommendedWordCount(taskType);
+            
+            if (words < recommendedRange.min) {
+                score -= 1;
+                feedback.push(`Text is too short (${words} words). Aim for ${recommendedRange.min}-${recommendedRange.max} words.`);
+            } else if (words > recommendedRange.max) {
+                score -= 0.5;
+                feedback.push(`Text is quite long (${words} words). Consider being more concise.`);
+            } else {
+                feedback.push(`Good word count (${words} words).`);
+            }
+
+            if (taskType === 'essay') {
+                if (paragraphs < 4) {
+                    score -= 1;
+                    feedback.push('Essays should have at least 4-5 paragraphs (intro, body paragraphs, conclusion).');
+                } else {
+                    feedback.push('Good paragraph structure for an essay.');
+                }
+            }
+
+            if (taskType === 'review') {
+                const hasTitle = /^[A-Z]/.test(text.trim());
+                const hasBasicInfo = /\b(film|movie|book|game|album|restaurant|hotel)\b/i.test(text);
+                const hasOpinion = /\b(I think|I believe|in my opinion|personally|I found|I felt|I enjoyed|I didn't like)\b/i.test(text);
+                const hasRecommendation = /\b(recommend|suggest|worth|should|would|enjoy|try)\b/i.test(text);
+                const hasSpecificDetails = /\b(acting|plot|story|characters|effects|music|service|food|atmosphere)\b/i.test(text);
+                
+                if (hasBasicInfo) {
+                    score += 0.3;
+                    feedback.push('Good - includes basic information about what you\'re reviewing.');
+                } else {
+                    score -= 0.5;
+                    feedback.push('Consider mentioning what type of item you\'re reviewing and basic details.');
+                }
+
+                if (hasOpinion) {
+                    score += 0.3;
+                    feedback.push('Excellent - clear personal opinions expressed.');
+                } else {
+                    score -= 0.5;
+                    feedback.push('Reviews should include your personal opinions and reactions.');
+                }
+
+                if (hasRecommendation) {
+                    score += 0.2;
+                    feedback.push('Good - includes recommendation for readers.');
+                } else {
+                    feedback.push('Consider adding whether you\'d recommend this to others.');
+                }
+
+                if (hasSpecificDetails) {
+                    score += 0.2;
+                    feedback.push('Good use of specific details about different aspects.');
+                } else {
+                    feedback.push('Try to mention specific aspects like acting, plot, or other relevant details.');
+                }
+
+                if (paragraphs >= 4) {
+                    feedback.push('Good paragraph structure for a review.');
+                } else if (paragraphs < 3) {
+                    score -= 0.5;
+                    feedback.push('Reviews should have clear paragraphs: intro, strengths, weaknesses, conclusion.');
+                }
+            }
+
+            if (taskType === 'story') {
+                const hasDialogue = text.includes('"') || text.includes("'");
+                const hasDescriptiveWords = /\b(beautiful|dark|mysterious|suddenly|quietly|loudly|strange|frightening|spectacular)\b/i.test(text);
+                const hasNarrative = /\b(then|next|after|finally|meanwhile|suddenly|eventually)\b/i.test(text);
+                
+                if (hasDialogue) {
+                    feedback.push('Good use of dialogue in your story.');
+                }
+                if (hasDescriptiveWords) {
+                    score += 0.3;
+                    feedback.push('Nice descriptive language.');
+                }
+                if (hasNarrative) {
+                    score += 0.2;
+                    feedback.push('Good narrative flow with time connectors.');
+                }
+            }
+
+            if (taskType === 'article') {
+                const hasQuestion = /\?/.test(text);
+                const hasEngagingStart = /^(Have you|Do you|Imagine|What if|These days|Nowadays)/i.test(text);
+                const hasPersonalExperience = /\b(I|my|me|personally|in my experience)\b/i.test(text);
+                
+                if (hasQuestion) {
+                    score += 0.2;
+                    feedback.push('Good use of questions to engage readers.');
+                }
+                if (hasEngagingStart) {
+                    score += 0.3;
+                    feedback.push('Engaging opening that hooks the reader.');
+                }
+                if (hasPersonalExperience) {
+                    score += 0.2;
+                    feedback.push('Good personal touch makes the article more engaging.');
+                }
+            }
+
+            if (taskType === 'email') {
+                const hasGreeting = /^(Dear|Hi|Hello)/i.test(text.trim());
+                const hasClosing = /\b(Best wishes|Kind regards|Take care|Yours sincerely|Looking forward)\b/i.test(text);
+                const hasPurpose = /\b(writing to|wanted to|just to let you know|thanks for)\b/i.test(text);
+                
+                if (hasGreeting) {
+                    score += 0.3;
+                    feedback.push('Good - includes appropriate greeting.');
+                } else {
+                    score -= 0.5;
+                    feedback.push('Emails should start with an appropriate greeting.');
+                }
+
+                if (hasClosing) {
+                    score += 0.3;
+                    feedback.push('Good - includes appropriate closing.');
+                } else {
+                    score -= 0.5;
+                    feedback.push('Emails should end with an appropriate sign-off.');
+                }
+
+                if (hasPurpose) {
+                    score += 0.2;
+                    feedback.push('Clear purpose for writing.');
+                } else {
+                    feedback.push('Make the purpose of your email clearer.');
+                }
+            }
+
+            return {
+                score: Math.max(1, Math.min(5, score)),
+                feedback: feedback.join(' ')
+            };
+        }
+
+        function evaluateOrganization(text, paragraphs, sentences) {
+            let score = 3;
+            let feedback = [];
+
+            if (paragraphs >= 3) {
+                score += 0.5;
+                feedback.push('Good paragraph organization.');
+            } else {
+                score -= 1;
+                feedback.push('Consider organizing your ideas into more paragraphs.');
+            }
+
+            const hasTransitionWords = /\b(however|therefore|furthermore|moreover|in addition|on the other hand|firstly|secondly|finally|in conclusion)\b/i.test(text);
+            
+            if (hasTransitionWords) {
+                score += 0.5;
+                feedback.push('Good use of linking words and transitions.');
+            } else {
+                feedback.push('Try using more linking words to connect your ideas.');
+            }
+
+            const avgSentencesPerParagraph = sentences / paragraphs;
+            if (avgSentencesPerParagraph >= 3 && avgSentencesPerParagraph <= 6) {
+                feedback.push('Good sentence distribution across paragraphs.');
+            } else if (avgSentencesPerParagraph < 3) {
+                score -= 0.5;
+                feedback.push('Some paragraphs might be too short. Try developing your ideas more.');
+            }
+
+            return {
+                score: Math.max(1, Math.min(5, score)),
+                feedback: feedback.join(' ')
+            };
+        }
+
+        function evaluateLanguage(text, avgWordsPerSentence) {
+            let score = 3;
+            let feedback = [];
+
+            if (avgWordsPerSentence >= 12 && avgWordsPerSentence <= 20) {
+                score += 0.5;
+                feedback.push('Good sentence length variety.');
+            } else if (avgWordsPerSentence < 8) {
+                feedback.push('Try using more complex sentence structures.');
+            } else if (avgWordsPerSentence > 25) {
+                score -= 0.5;
+                feedback.push('Some sentences might be too long. Consider breaking them up.');
+            }
+
+            const hasComplexStructures = /\b(although|because|since|while|whereas|despite|unless)\b/i.test(text);
+            if (hasComplexStructures) {
+                score += 0.5;
+                feedback.push('Good use of complex sentence structures.');
+            } else {
+                feedback.push('Try using more complex sentences with subordinate clauses.');
+            }
+
+            const vocabularyLevel = assessVocabulary(text);
+            if (vocabularyLevel === 'advanced') {
+                score += 0.5;
+                feedback.push('Excellent vocabulary range.');
+            } else if (vocabularyLevel === 'intermediate') {
+                feedback.push('Good vocabulary usage.');
+            } else {
+                feedback.push('Try using more varied and sophisticated vocabulary.');
+            }
+
+            return {
+                score: Math.max(1, Math.min(5, score)),
+                feedback: feedback.join(' ')
+            };
+        }
+
+        function evaluateAccuracy(text) {
+            let score = 4;
+            let feedback = [];
+
+            const commonErrors = [
+                { pattern: /\bi\b/g, message: "Remember to capitalize 'I'" },
+                { pattern: /\s{2,}/g, message: "Check for extra spaces" },
+                { pattern: /[.!?]\s*[a-z]/g, message: "Capitalize after punctuation" },
+                { pattern: /\b(there|their|they're)\b/gi, message: "Check there/their/they're usage" },
+                { pattern: /\b(its|it's)\b/gi, message: "Check its/it's usage" }
+            ];
+
+            let errorCount = 0;
+            commonErrors.forEach(error => {
+                const matches = text.match(error.pattern);
+                if (matches) {
+                    errorCount += matches.length;
+                }
+            });
+
+            if (errorCount === 0) {
+                feedback.push('Excellent accuracy with no obvious errors detected.');
+            } else if (errorCount <= 2) {
+                score -= 0.5;
+                feedback.push('Very good accuracy with minimal errors.');
+            } else if (errorCount <= 5) {
+                score -= 1;
+                feedback.push('Good accuracy but check for some common errors.');
+            } else {
+                score -= 2;
+                feedback.push('Several errors detected. Proofread carefully.');
+            }
+
+            const hasPunctuation = /[.!?]/.test(text);
+            if (!hasPunctuation) {
+                score -= 1;
+                feedback.push('Make sure to use proper punctuation.');
+            }
+
+            return {
+                score: Math.max(1, Math.min(5, score)),
+                feedback: feedback.join(' ')
+            };
+        }
+
+        function assessVocabulary(text) {
+            const advancedWords = [
+                'consequently', 'furthermore', 'nevertheless', 'substantial', 'significant',
+                'comprehensive', 'sophisticated', 'remarkable', 'exceptional', 'tremendous',
+                'magnificent', 'extraordinary', 'fascinating', 'intriguing', 'compelling'
+            ];
+
+            const intermediateWords = [
+                'however', 'therefore', 'although', 'because', 'important', 'interesting',
+                'beautiful', 'difficult', 'necessary', 'possible', 'different', 'various'
+            ];
+
+            const textLower = text.toLowerCase();
+            const advancedCount = advancedWords.filter(word => textLower.includes(word)).length;
+            const intermediateCount = intermediateWords.filter(word => textLower.includes(word)).length;
+
+            if (advancedCount >= 3) return 'advanced';
+            if (intermediateCount >= 5 || advancedCount >= 1) return 'intermediate';
+            return 'basic';
+        }
+
+        function getRecommendedWordCount(taskType) {
+            const ranges = {
+                essay: { min: 140, max: 190 },
+                review: { min: 140, max: 190 },
+                story: { min: 140, max: 190 },
+                article: { min: 140, max: 190 },
+                email: { min: 140, max: 190 }
+            };
+            return ranges[taskType] || ranges.essay;
+        }
+
+        function displayResults(evaluation) {
+            const { overallScore, criteria, wordCount, recommendedRange } = evaluation;
+            
+            let scoreColor = '#fc8181';
+            if (overallScore >= 4) scoreColor = '#68d391';
+            else if (overallScore >= 3) scoreColor = '#fbd38d';
+
+            const resultsHTML = `
+                <div class="overall-score">
+                    <div class="score-display" style="color: ${scoreColor}">${overallScore}/5</div>
+                    <div class="score-label">Overall Score</div>
+                </div>
+
+                <div class="criteria-breakdown">
+                    <div class="criterion">
+                        <div class="criterion-header">
+                            <span class="criterion-name">Content & Task Achievement</span>
+                            <span class="criterion-score">${criteria.content.score}/5</span>
+                        </div>
+                        <div class="criterion-feedback ${getFeedbackClass(criteria.content.score)}">
+                            ${criteria.content.feedback}
+                        </div>
+                    </div>
+
+                    <div class="criterion">
+                        <div class="criterion-header">
+                            <span class="criterion-name">Organization & Structure</span>
+                            <span class="criterion-score">${criteria.organization.score}/5</span>
+                        </div>
+                        <div class="criterion-feedback ${getFeedbackClass(criteria.organization.score)}">
+                            ${criteria.organization.feedback}
+                        </div>
+                    </div>
+
+                    <div class="criterion">
+                        <div class="criterion-header">
+                            <span class="criterion-name">Language Use & Range</span>
+                            <span class="criterion-score">${criteria.language.score}/5</span>
+                        </div>
+                        <div class="criterion-feedback ${getFeedbackClass(criteria.language.score)}">
+                            ${criteria.language.feedback}
+                        </div>
+                    </div>
+
+                    <div class="criterion">
+                        <div class="criterion-header">
+                            <span class="criterion-name">Grammar & Accuracy</span>
+                            <span class="criterion-score">${criteria.accuracy.score}/5</span>
+                        </div>
+                        <div class="criterion-feedback ${getFeedbackClass(criteria.accuracy.score)}">
+                            ${criteria.accuracy.feedback}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="criterion" style="margin-top: 20px; border-left-color: #fbd38d;">
+                    <div class="criterion-header">
+                        <span class="criterion-name">General Recommendations</span>
+                    </div>
+                    <div class="criterion-feedback">
+                        ${getGeneralRecommendations(evaluation)}
+                    </div>
+                </div>
+            `;
+
+            results.innerHTML = resultsHTML;
+        }
+
+        function getFeedbackClass(score) {
+            if (score >= 4) return 'feedback-positive';
+            if (score >= 3) return 'feedback-neutral';
+            return 'feedback-negative';
+        }
+
+        function getGeneralRecommendations(evaluation) {
+            const { overallScore, criteria, wordCount } = evaluation;
+            let recommendations = [];
+
+            if (overallScore >= 4) {
+                recommendations.push('Excellent work! Your writing demonstrates strong FCE-level skills.');
+            } else if (overallScore >= 3) {
+                recommendations.push('Good work! With some improvements, you can achieve an even higher score.');
+            } else {
+                recommendations.push('Keep practicing! Focus on the areas highlighted above for improvement.');
+            }
+
+            const lowestScore = Math.min(
+                criteria.content.score,
+                criteria.organization.score,
+                criteria.language.score,
+                criteria.accuracy.score
+            );
+
+            if (criteria.content.score === lowestScore) {
+                recommendations.push('Focus on developing your ideas more fully and meeting task requirements.');
+            }
+            if (criteria.organization.score === lowestScore) {
+                recommendations.push('Work on structuring your writing with clear paragraphs and transitions.');
+            }
+            if (criteria.language.score === lowestScore) {
+                recommendations.push('Expand your vocabulary and try using more complex sentence structures.');
+            }
+            if (criteria.accuracy.score === lowestScore) {
+                recommendations.push('Proofread carefully and review grammar rules to reduce errors.');
+            }
+
+            return recommendations.join(' ');
+        }
+
+        const loadSampleButton = document.getElementById('loadSample');
+        
+        loadSampleButton.addEventListener('click', loadSampleText);
+
+        function loadSampleText() {
+            const sampleReview = `A film that didn't disappoint me
+
+How often have you been to the cinema to see a film you were really looking forward to, only to be disappointed with some aspect of it? Well, I saw "The House in the Forest" last week and it completely lived up to my expectations.
+
+It was about a family who lived in the middle of nowhere, and the strange things that happened to them. I suppose you could call it a fantasy film, but in some ways it was close to horror. The acting was superb, and the special effects were spectacular - I nearly jumped out of my seat in surprise several times!
+
+The best part was the ending. I won't tell you what happened because I wouldn't want to spoil it, but it was totally unexpected, and yet strangely seemed to be completely logical as well. I left the cinema feeling that I had watched a very good story and that the ending had been memorable and satisfying.
+
+If you enjoy films that have strong stories and some frightening elements, you will really enjoy this!`;
+
+            writingText.value = sampleReview;
+            taskType.value = 'review';
+            updateWordCount();
+        }
+
+        updateWordCount();
+    </script>
+</body>
+</html>
