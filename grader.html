@@ -59,7 +59,7 @@
 
         .grader-container {
             display: grid;
-            grid-template-columns: 1fr 400px;
+            grid-template-columns: 1fr 1fr;
             gap: 30px;
             margin-bottom: 30px;
         }
@@ -143,40 +143,42 @@
         .results-panel {
             background: #374151;
             border-radius: 8px;
-            padding: 25px;
+            padding: 20px;
             border: 1px solid #4a5568;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
         .overall-score {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
+            margin-bottom: 20px;
+            padding: 15px;
             background: #2d3748;
             border-radius: 8px;
             border: 2px solid #63b3ed;
         }
 
         .score-display {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: bold;
             color: #63b3ed;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .score-label {
             color: #f7fafc;
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .criteria-breakdown {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
 
         .criterion {
             background: #2d3748;
-            padding: 20px;
+            padding: 15px;
             border-radius: 6px;
             border-left: 4px solid #63b3ed;
         }
@@ -185,27 +187,28 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .criterion-name {
             color: #f7fafc;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .criterion-score {
             background: #63b3ed;
             color: #1a202c;
-            padding: 5px 12px;
-            border-radius: 20px;
+            padding: 4px 10px;
+            border-radius: 15px;
             font-weight: bold;
+            font-size: 0.9rem;
         }
 
         .criterion-feedback {
             color: #cbd5e0;
-            font-size: 0.95rem;
-            line-height: 1.5;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
         .feedback-positive {
@@ -226,8 +229,192 @@
             font-style: italic;
         }
 
-        @media (max-width: 1024px) {
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4a5568;
+            color: #f7fafc;
+            padding: 10px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .detailed-feedback {
+            margin-top: 15px;
+        }
+
+        .strength-weakness-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .strengths {
+            background: #1a4d3a;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #68d391;
+        }
+
+        .improvements {
+            background: #4a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #fc8181;
+        }
+
+        .strengths h4 {
+            color: #68d391;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .improvements h4 {
+            color: #fc8181;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .strengths ul, .improvements ul {
+            color: #a7f3d0;
+            list-style: none;
+            font-size: 0.85rem;
+        }
+
+        .improvements ul {
+            color: #fca5a5;
+        }
+
+        .strengths li, .improvements li {
+            margin: 6px 0;
+            padding-left: 12px;
+            position: relative;
+            line-height: 1.3;
+        }
+
+        .strengths li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #68d391;
+        }
+
+        .improvements li:before {
+            content: "⚠";
+            position: absolute;
+            left: 0;
+            color: #fc8181;
+        }
+
+        .progress-chart {
+            margin-top: 20px;
+            padding: 15px;
+            background: #2d3748;
+            border-radius: 8px;
+            border: 1px solid #4a5568;
+        }
+
+        .progress-chart h3 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+
+        .chart-line {
+            display: flex;
+            align-items: end;
+            height: 80px;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .bar {
+            background: #63b3ed;
+            width: 25px;
+            border-radius: 3px 3px 0 0;
+            transition: height 0.3s ease;
+        }
+
+        .readability-info {
+            background: #2c5282;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+            border-left: 4px solid #63b3ed;
+        }
+
+        .readability-info h4 {
+            color: #bee3f8;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        .readability-info p {
+            color: #bee3f8;
+            font-size: 0.85rem;
+        }
+
+        .export-section {
+            margin-top: 15px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .export-btn {
+            padding: 8px 16px;
+            background: #4a5568;
+            color: #f7fafc;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.2s ease;
+        }
+
+        .export-btn:hover {
+            background: #63b3ed;
+        }
+
+        /* Custom scrollbar for results panel */
+        .results-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .results-panel::-webkit-scrollbar-track {
+            background: #2d3748;
+            border-radius: 4px;
+        }
+
+        .results-panel::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 4px;
+        }
+
+        .results-panel::-webkit-scrollbar-thumb:hover {
+            background: #63b3ed;
+        }
+
+        @media (max-width: 1200px) {
             .grader-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-panel {
+                max-height: none;
+                overflow-y: visible;
+            }
+            
+            .strength-weakness-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -237,12 +424,33 @@
                 padding: 15px;
             }
             
-            h1 {
+            .grader-container {
+                gap: 20px;
+            }
+            
+            .results-panel {
+                padding: 15px;
+            }
+            
+            .overall-score {
+                padding: 12px;
+            }
+            
+            .score-display {
                 font-size: 2rem;
             }
             
-            .text-input {
-                min-height: 300px;
+            .criterion {
+                padding: 12px;
+            }
+            
+            .strength-weakness-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .strengths, .improvements {
+                padding: 12px;
             }
         }
     </style>
@@ -269,7 +477,15 @@
 
                 <div class="sample-texts" style="margin-bottom: 20px;">
                     <label style="display: block; margin-bottom: 8px; color: #f7fafc; font-weight: 500;">Try a sample:</label>
-                    <button id="loadSample" class="sample-button" style="padding: 8px 15px; background: #4a5568; color: #f7fafc; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">Load Sample Review</button>
+                    <select id="sampleSelector" style="padding: 8px 15px; background: #4a5568; color: #f7fafc; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; margin-right: 10px;">
+                        <option value="">Choose a sample...</option>
+                        <option value="review">Review - A film that didn't disappoint me</option>
+                        <option value="essay">Essay - Development Vs Environment</option>
+                        <option value="story">Story - She Smiled And Walked Away</option>
+                        <option value="article">Article - The most useful thing I have ever learned</option>
+                        <option value="email">Email - Touring Holiday</option>
+                    </select>
+                    <button id="loadSample" class="sample-button" style="padding: 8px 15px; background: #63b3ed; color: #1a202c; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">Load Sample</button>
                 </div>
 
                 <textarea 
@@ -280,6 +496,7 @@
                 
                 <div class="word-count">
                     Word count: <span id="wordCount">0</span> words
+                    <span id="quickTips" style="margin-left: 15px; color: #fbd38d; font-size: 0.8rem;"></span>
                 </div>
 
                 <button id="gradeButton" class="grade-button">Grade My Writing</button>
@@ -293,14 +510,32 @@
         </div>
     </div>
 
+    <div id="notification" class="notification"></div>
+
     <script>
         const writingText = document.getElementById('writingText');
         const wordCount = document.getElementById('wordCount');
         const gradeButton = document.getElementById('gradeButton');
         const results = document.getElementById('results');
         const taskType = document.getElementById('taskType');
+        const quickTips = document.getElementById('quickTips');
+        const notification = document.getElementById('notification');
 
-        writingText.addEventListener('input', updateWordCount);
+        let lastEvaluation = null;
+        let typingTimer;
+        const TYPING_DELAY = 2000;
+
+        writingText.addEventListener('input', function() {
+            updateWordCount();
+            
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                if (writingText.value.trim().length > 50) {
+                    showQuickFeedback();
+                }
+            }, TYPING_DELAY);
+        });
+
         gradeButton.addEventListener('click', gradeWriting);
 
         function updateWordCount() {
@@ -309,24 +544,53 @@
             wordCount.textContent = words;
         }
 
+        function showQuickFeedback() {
+            const text = writingText.value.trim();
+            const words = text.split(/\s+/).length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+            
+            let tips = [];
+            
+            if (words < 50) tips.push('Keep writing - you need more content');
+            else if (words > 200) tips.push('Consider if you need to be more concise');
+            
+            if (sentences > 0 && words / sentences < 8) tips.push('Try using longer sentences');
+            if (!/[.!?]/.test(text)) tips.push('Don\'t forget punctuation');
+            
+            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0).length;
+            if (paragraphs < 2 && words > 100) tips.push('Consider breaking into paragraphs');
+            
+            quickTips.textContent = tips.length > 0 ? tips[0] : '';
+        }
+
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
         function gradeWriting() {
             const text = writingText.value.trim();
             const task = taskType.value;
             
             if (!text) {
-                alert('Please enter some text to grade.');
+                showNotification('Please enter some text to grade.');
                 return;
             }
-
-            gradeButton.disabled = true;
+                        gradeButton.disabled = true;
             gradeButton.textContent = 'Grading...';
             results.innerHTML = '<div class="loading">Analyzing your writing...</div>';
 
             setTimeout(() => {
                 const evaluation = evaluateWriting(text, task);
                 displayResults(evaluation);
+                saveResults(evaluation);
                 gradeButton.disabled = false;
                 gradeButton.textContent = 'Grade My Writing';
+                lastEvaluation = evaluation;
             }, 1500);
         }
 
@@ -336,30 +600,261 @@
             const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0).length;
             
             const avgWordsPerSentence = words / sentences;
-            const avgSentencesPerParagraph = sentences / paragraphs;
 
             const criteria = {
                 content: evaluateContent(text, taskType, words, paragraphs),
                 organization: evaluateOrganization(text, paragraphs, sentences),
                 language: evaluateLanguage(text, avgWordsPerSentence),
-                accuracy: evaluateAccuracy(text)
+                accuracy: evaluateGrammarAndStyle(text),
+                taskSpecific: evaluateTaskSpecificCriteria(text, taskType)
             };
 
             const overallScore = Math.round(
                 (criteria.content.score + criteria.organization.score + 
-                 criteria.language.score + criteria.accuracy.score) / 4
+                 criteria.language.score + criteria.accuracy.score + criteria.taskSpecific.score) / 5
             );
+
+            const readabilityFeedback = evaluateReadability(text);
+            const detailedAnalysis = generateDetailedAnalysis(criteria, text);
 
             return {
                 overallScore,
                 criteria,
                 wordCount: words,
-                recommendedRange: getRecommendedWordCount(taskType)
+                recommendedRange: getRecommendedWordCount(taskType),
+                readability: readabilityFeedback,
+                analysis: detailedAnalysis
             };
         }
 
-        function evaluateContent(text, taskType, words, paragraphs) {
+        function evaluateTaskSpecificCriteria(text, taskType) {
+            switch(taskType) {
+                case 'essay':
+                    return evaluateEssaySpecific(text);
+                case 'review':
+                    return evaluateReviewSpecific(text);
+                case 'story':
+                    return evaluateStorySpecific(text);
+                case 'article':
+                    return evaluateArticleSpecific(text);
+                case 'email':
+                    return evaluateEmailSpecific(text);
+                default:
+                    return { score: 3, feedback: 'Task-specific evaluation not available.' };
+            }
+        }
+
+        function evaluateEssaySpecific(text) {
+            let score = 3.5;
+            let feedback = [];
+            
+            const hasThesis = /\b(I believe|I think|In my opinion|This essay will|I will discuss|I argue that|essential|important|should|benefits|advantages)\b/i.test(text);
+            if (hasThesis) {
+                score += 0.4;
+                feedback.push('Excellent - clear thesis and position stated.');
+            } else {
+                score -= 0.3;
+                feedback.push('Consider adding a clearer thesis statement.');
+            }
+            
+            const hasCounterargument = /\b(However|On the other hand|Critics argue|Some people believe|Nevertheless|Although|Despite)\b/i.test(text);
+            if (hasCounterargument) {
+                score += 0.3;
+                feedback.push('Good use of balanced argumentation.');
+            }
+            
+            const hasEvidence = /\b(For example|For instance|Research shows|Studies indicate|According to|This is because)\b/i.test(text);
+            if (hasEvidence) {
+                score += 0.4;
+                feedback.push('Excellent use of examples and evidence.');
+            } else {
+                score -= 0.2;
+                feedback.push('Try adding more specific examples to support your points.');
+            }
+
+            const hasConclusion = /\b(In conclusion|To conclude|Finally|In summary|Therefore)\b/i.test(text);
+            if (hasConclusion) {
+                score += 0.3;
+                feedback.push('Good conclusion that summarizes main points.');
+            }
+
+            const hasMultiplePoints = /\b(Firstly|First|Secondly|Second|Finally|Lastly|Another|Moreover|Furthermore)\b/i.test(text);
+            if (hasMultiplePoints) {
+                score += 0.4;
+                feedback.push('Excellent structure with multiple well-developed points.');
+            }
+            
+            return { score: Math.max(1, Math.min(5, score)), feedback: feedback.join(' ') };
+        }
+
+        function evaluateReviewSpecific(text) {
             let score = 3;
+            let feedback = [];
+            
+            const hasBasicInfo = /\b(film|movie|book|game|album|restaurant|hotel)\b/i.test(text);
+            const hasOpinion = /\b(I think|I believe|in my opinion|personally|I found|I felt|I enjoyed|I didn't like)\b/i.test(text);
+            const hasRecommendation = /\b(recommend|suggest|worth|should|would|enjoy|try)\b/i.test(text);
+            const hasSpecificDetails = /\b(acting|plot|story|characters|effects|music|service|food|atmosphere|graphics|gameplay)\b/i.test(text);
+            const hasTitle = /^[A-Z][^.!?]*$/m.test(text.trim().split('\n')[0]);
+            
+            if (hasTitle) {
+                score += 0.2;
+                feedback.push('Good - includes a clear title.');
+            }
+            
+            if (hasBasicInfo) {
+                score += 0.3;
+                feedback.push('Good - includes basic information about what you\'re reviewing.');
+            } else {
+                score -= 0.5;
+                feedback.push('Consider mentioning what type of item you\'re reviewing and basic details.');
+            }
+
+            if (hasOpinion) {
+                score += 0.3;
+                feedback.push('Excellent - clear personal opinions expressed.');
+            } else {
+                score -= 0.5;
+                feedback.push('Reviews should include your personal opinions and reactions.');
+            }
+
+            if (hasRecommendation) {
+                score += 0.2;
+                feedback.push('Good - includes recommendation for readers.');
+            } else {
+                feedback.push('Consider adding whether you\'d recommend this to others.');
+            }
+
+            if (hasSpecificDetails) {
+                score += 0.2;
+                feedback.push('Good use of specific details about different aspects.');
+            } else {
+                feedback.push('Try to mention specific aspects like acting, plot, or other relevant details.');
+            }
+            
+            return { score: Math.max(1, Math.min(5, score)), feedback: feedback.join(' ') };
+        }
+
+        function evaluateStorySpecific(text) {
+            let score = 3;
+            let feedback = [];
+            
+            const hasDialogue = text.includes('"') || text.includes("'");
+            const hasDescriptiveWords = /\b(beautiful|dark|mysterious|suddenly|quietly|loudly|strange|frightening|spectacular|enormous|tiny|ancient|modern)\b/i.test(text);
+            const hasNarrative = /\b(then|next|after|finally|meanwhile|suddenly|eventually|later|soon|immediately)\b/i.test(text);
+            const hasCharacterDevelopment = /\b(felt|thought|realized|understood|remembered|decided|wondered)\b/i.test(text);
+            const hasSetting = /\b(in the|at the|outside|inside|near|far|above|below|behind|in front of)\b/i.test(text);
+            
+            if (hasDialogue) {
+                score += 0.2;
+                feedback.push('Good use of dialogue in your story.');
+            }
+            
+            if (hasDescriptiveWords) {
+                score += 0.3;
+                feedback.push('Nice descriptive language.');
+            } else {
+                feedback.push('Try using more descriptive adjectives and adverbs.');
+            }
+            
+            if (hasNarrative) {
+                score += 0.2;
+                feedback.push('Good narrative flow with time connectors.');
+            }
+            
+            if (hasCharacterDevelopment) {
+                score += 0.2;
+                feedback.push('Good character development showing thoughts and feelings.');
+            }
+            
+            if (hasSetting) {
+                score += 0.1;
+                feedback.push('Good sense of place and setting.');
+            }
+            
+            return { score: Math.max(1, Math.min(5, score)), feedback: feedback.join(' ') };
+        }
+
+        function evaluateArticleSpecific(text) {
+            let score = 3;
+            let feedback = [];
+            
+            const hasQuestion = /\?/.test(text);
+            const hasEngagingStart = /^(Have you|Do you|Imagine|What if|These days|Nowadays)/i.test(text);
+            const hasPersonalExperience = /\b(I|my|me|personally|in my experience)\b/i.test(text);
+            const hasDirectAddress = /\b(you|your|yourself)\b/i.test(text);
+            const hasTitle = /^[A-Z][^.!?]*$/m.test(text.trim().split('\n')[0]);
+            
+            if (hasTitle) {
+                score += 0.2;
+                feedback.push('Good - includes an engaging title.');
+            }
+            
+            if (hasQuestion) {
+                score += 0.2;
+                feedback.push('Good use of questions to engage readers.');
+            }
+            
+            if (hasEngagingStart) {
+                score += 0.3;
+                feedback.push('Engaging opening that hooks the reader.');
+            }
+            
+            if (hasPersonalExperience) {
+                score += 0.2;
+                feedback.push('Good personal touch makes the article more engaging.');
+            }
+            
+            if (hasDirectAddress) {
+                score += 0.1;
+                feedback.push('Good use of direct address to connect with readers.');
+            }
+            
+            return { score: Math.max(1, Math.min(5, score)), feedback: feedback.join(' ') };
+        }
+
+        function evaluateEmailSpecific(text) {
+            let score = 3;
+            let feedback = [];
+            
+            const hasGreeting = /^(Dear|Hi|Hello)/i.test(text.trim());
+            const hasClosing = /\b(Best wishes|Kind regards|Take care|Yours sincerely|Looking forward|Love|Cheers)\b/i.test(text);
+            const hasPurpose = /\b(writing to|wanted to|just to let you know|thanks for|I hope|I was wondering)\b/i.test(text);
+            const hasPoliteLanguage = /\b(please|thank you|thanks|I would appreciate|I hope|I'm sorry)\b/i.test(text);
+            
+            if (hasGreeting) {
+                score += 0.4;
+                feedback.push('Good - includes appropriate greeting.');
+            } else {
+                score -= 0.5;
+                feedback.push('Emails should start with an appropriate greeting.');
+            }
+
+            if (hasClosing) {
+                score += 0.4;
+                feedback.push('Good - includes appropriate closing.');
+            } else {
+                score -= 0.5;
+                feedback.push('Emails should end with an appropriate sign-off.');
+            }
+
+            if (hasPurpose) {
+                score += 0.2;
+                feedback.push('Clear purpose for writing.');
+            } else {
+                feedback.push('Make the purpose of your email clearer.');
+            }
+            
+            if (hasPoliteLanguage) {
+                score += 0.1;
+                feedback.push('Good use of polite language.');
+            }
+            
+            return { score: Math.max(1, Math.min(5, score)), feedback: feedback.join(' ') };
+        }
+
+        function evaluateContent(text, taskType, words, paragraphs) {
+            let score = 3.5;
             let feedback = [];
 
             const recommendedRange = getRecommendedWordCount(taskType);
@@ -367,131 +862,23 @@
             if (words < recommendedRange.min) {
                 score -= 1;
                 feedback.push(`Text is too short (${words} words). Aim for ${recommendedRange.min}-${recommendedRange.max} words.`);
-            } else if (words > recommendedRange.max) {
-                score -= 0.5;
+            } else if (words > recommendedRange.max + 50) {
+                score -= 0.3;
                 feedback.push(`Text is quite long (${words} words). Consider being more concise.`);
             } else {
-                feedback.push(`Good word count (${words} words).`);
+                score += 0.3;
+                feedback.push(`Excellent word count (${words} words).`);
             }
 
-            if (taskType === 'essay') {
-                if (paragraphs < 4) {
-                    score -= 1;
-                    feedback.push('Essays should have at least 4-5 paragraphs (intro, body paragraphs, conclusion).');
-                } else {
-                    feedback.push('Good paragraph structure for an essay.');
-                }
-            }
-
-            if (taskType === 'review') {
-                const hasTitle = /^[A-Z]/.test(text.trim());
-                const hasBasicInfo = /\b(film|movie|book|game|album|restaurant|hotel)\b/i.test(text);
-                const hasOpinion = /\b(I think|I believe|in my opinion|personally|I found|I felt|I enjoyed|I didn't like)\b/i.test(text);
-                const hasRecommendation = /\b(recommend|suggest|worth|should|would|enjoy|try)\b/i.test(text);
-                const hasSpecificDetails = /\b(acting|plot|story|characters|effects|music|service|food|atmosphere)\b/i.test(text);
-                
-                if (hasBasicInfo) {
-                    score += 0.3;
-                    feedback.push('Good - includes basic information about what you\'re reviewing.');
-                } else {
-                    score -= 0.5;
-                    feedback.push('Consider mentioning what type of item you\'re reviewing and basic details.');
-                }
-
-                if (hasOpinion) {
-                    score += 0.3;
-                    feedback.push('Excellent - clear personal opinions expressed.');
-                } else {
-                    score -= 0.5;
-                    feedback.push('Reviews should include your personal opinions and reactions.');
-                }
-
-                if (hasRecommendation) {
-                    score += 0.2;
-                    feedback.push('Good - includes recommendation for readers.');
-                } else {
-                    feedback.push('Consider adding whether you\'d recommend this to others.');
-                }
-
-                if (hasSpecificDetails) {
-                    score += 0.2;
-                    feedback.push('Good use of specific details about different aspects.');
-                } else {
-                    feedback.push('Try to mention specific aspects like acting, plot, or other relevant details.');
-                }
-
-                if (paragraphs >= 4) {
-                    feedback.push('Good paragraph structure for a review.');
-                } else if (paragraphs < 3) {
-                    score -= 0.5;
-                    feedback.push('Reviews should have clear paragraphs: intro, strengths, weaknesses, conclusion.');
-                }
-            }
-
-            if (taskType === 'story') {
-                const hasDialogue = text.includes('"') || text.includes("'");
-                const hasDescriptiveWords = /\b(beautiful|dark|mysterious|suddenly|quietly|loudly|strange|frightening|spectacular)\b/i.test(text);
-                const hasNarrative = /\b(then|next|after|finally|meanwhile|suddenly|eventually)\b/i.test(text);
-                
-                if (hasDialogue) {
-                    feedback.push('Good use of dialogue in your story.');
-                }
-                if (hasDescriptiveWords) {
-                    score += 0.3;
-                    feedback.push('Nice descriptive language.');
-                }
-                if (hasNarrative) {
-                    score += 0.2;
-                    feedback.push('Good narrative flow with time connectors.');
-                }
-            }
-
-            if (taskType === 'article') {
-                const hasQuestion = /\?/.test(text);
-                const hasEngagingStart = /^(Have you|Do you|Imagine|What if|These days|Nowadays)/i.test(text);
-                const hasPersonalExperience = /\b(I|my|me|personally|in my experience)\b/i.test(text);
-                
-                if (hasQuestion) {
-                    score += 0.2;
-                    feedback.push('Good use of questions to engage readers.');
-                }
-                if (hasEngagingStart) {
-                    score += 0.3;
-                    feedback.push('Engaging opening that hooks the reader.');
-                }
-                if (hasPersonalExperience) {
-                    score += 0.2;
-                    feedback.push('Good personal touch makes the article more engaging.');
-                }
-            }
-
-            if (taskType === 'email') {
-                const hasGreeting = /^(Dear|Hi|Hello)/i.test(text.trim());
-                const hasClosing = /\b(Best wishes|Kind regards|Take care|Yours sincerely|Looking forward)\b/i.test(text);
-                const hasPurpose = /\b(writing to|wanted to|just to let you know|thanks for)\b/i.test(text);
-                
-                if (hasGreeting) {
-                    score += 0.3;
-                    feedback.push('Good - includes appropriate greeting.');
-                } else {
-                    score -= 0.5;
-                    feedback.push('Emails should start with an appropriate greeting.');
-                }
-
-                if (hasClosing) {
-                    score += 0.3;
-                    feedback.push('Good - includes appropriate closing.');
-                } else {
-                    score -= 0.5;
-                    feedback.push('Emails should end with an appropriate sign-off.');
-                }
-
-                if (hasPurpose) {
-                    score += 0.2;
-                    feedback.push('Clear purpose for writing.');
-                } else {
-                    feedback.push('Make the purpose of your email clearer.');
-                }
+            if (paragraphs >= 4) {
+                score += 0.5;
+                feedback.push('Excellent paragraph organization with clear structure.');
+            } else if (paragraphs >= 3) {
+                score += 0.2;
+                feedback.push('Good paragraph organization.');
+            } else if (paragraphs < 2) {
+                score -= 0.5;
+                feedback.push('Consider organizing your ideas into more paragraphs.');
             }
 
             return {
@@ -501,32 +888,41 @@
         }
 
         function evaluateOrganization(text, paragraphs, sentences) {
-            let score = 3;
+            let score = 3.5;
             let feedback = [];
 
-            if (paragraphs >= 3) {
-                score += 0.5;
-                feedback.push('Good paragraph organization.');
-            } else {
-                score -= 1;
-                feedback.push('Consider organizing your ideas into more paragraphs.');
-            }
-
-            const hasTransitionWords = /\b(however|therefore|furthermore|moreover|in addition|on the other hand|firstly|secondly|finally|in conclusion)\b/i.test(text);
+            const hasTransitionWords = /\b(however|therefore|furthermore|moreover|in addition|on the other hand|firstly|secondly|finally|in conclusion|meanwhile|nevertheless|consequently|for example|for instance)\b/i.test(text);
             
             if (hasTransitionWords) {
-                score += 0.5;
-                feedback.push('Good use of linking words and transitions.');
+                const transitionCount = (text.match(/\b(however|therefore|furthermore|moreover|in addition|on the other hand|firstly|secondly|finally|in conclusion|meanwhile|nevertheless|consequently|for example|for instance)\b/gi) || []).length;
+                if (transitionCount >= 3) {
+                    score += 0.7;
+                    feedback.push('Excellent use of linking words and transitions throughout.');
+                } else {
+                    score += 0.4;
+                    feedback.push('Good use of linking words and transitions.');
+                }
             } else {
+                score -= 0.3;
                 feedback.push('Try using more linking words to connect your ideas.');
             }
 
             const avgSentencesPerParagraph = sentences / paragraphs;
             if (avgSentencesPerParagraph >= 3 && avgSentencesPerParagraph <= 6) {
-                feedback.push('Good sentence distribution across paragraphs.');
+                score += 0.3;
+                feedback.push('Excellent sentence distribution across paragraphs.');
             } else if (avgSentencesPerParagraph < 3) {
-                score -= 0.5;
+                score -= 0.4;
                 feedback.push('Some paragraphs might be too short. Try developing your ideas more.');
+            } else {
+                score -= 0.2;
+                feedback.push('Some paragraphs might be too long. Consider breaking them up.');
+            }
+
+            const hasLogicalFlow = checkLogicalFlow(text);
+            if (hasLogicalFlow) {
+                score += 0.4;
+                feedback.push('Excellent logical flow of ideas from introduction to conclusion.');
             }
 
             return {
@@ -535,36 +931,66 @@
             };
         }
 
+        function checkLogicalFlow(text) {
+            const introWords = /\b(first|firstly|to begin|initially)\b/i.test(text);
+            const bodyWords = /\b(second|secondly|next|then|also|furthermore)\b/i.test(text);
+            const conclusionWords = /\b(finally|in conclusion|to sum up|overall)\b/i.test(text);
+            
+            return introWords && bodyWords && conclusionWords;
+        }
+
         function evaluateLanguage(text, avgWordsPerSentence) {
-            let score = 3;
+            let score = 3.5;
             let feedback = [];
 
-            if (avgWordsPerSentence >= 12 && avgWordsPerSentence <= 20) {
+            if (avgWordsPerSentence >= 12 && avgWordsPerSentence <= 25) {
                 score += 0.5;
+                feedback.push('Excellent sentence length and complexity.');
+            } else if (avgWordsPerSentence >= 10 && avgWordsPerSentence <= 30) {
+                score += 0.3;
                 feedback.push('Good sentence length variety.');
             } else if (avgWordsPerSentence < 8) {
+                score -= 0.3;
                 feedback.push('Try using more complex sentence structures.');
-            } else if (avgWordsPerSentence > 25) {
-                score -= 0.5;
+            } else if (avgWordsPerSentence > 30) {
+                score -= 0.4;
                 feedback.push('Some sentences might be too long. Consider breaking them up.');
             }
 
-            const hasComplexStructures = /\b(although|because|since|while|whereas|despite|unless)\b/i.test(text);
+            const hasComplexStructures = /\b(although|because|since|while|whereas|despite|unless|even though|provided that|as long as|when|if|that|which|who)\b/i.test(text);
             if (hasComplexStructures) {
-                score += 0.5;
-                feedback.push('Good use of complex sentence structures.');
+                const complexCount = (text.match(/\b(although|because|since|while|whereas|despite|unless|even though|provided that|as long as|when|if|that|which|who)\b/gi) || []).length;
+                if (complexCount >= 5) {
+                    score += 0.7;
+                    feedback.push('Excellent use of complex sentence structures throughout.');
+                } else {
+                    score += 0.4;
+                    feedback.push('Good use of complex sentence structures.');
+                }
             } else {
+                score -= 0.4;
                 feedback.push('Try using more complex sentences with subordinate clauses.');
             }
 
             const vocabularyLevel = assessVocabulary(text);
             if (vocabularyLevel === 'advanced') {
-                score += 0.5;
-                feedback.push('Excellent vocabulary range.');
+                score += 0.6;
+                feedback.push('Outstanding vocabulary range and sophistication.');
             } else if (vocabularyLevel === 'intermediate') {
-                feedback.push('Good vocabulary usage.');
+                score += 0.3;
+                feedback.push('Good vocabulary usage with some sophisticated words.');
             } else {
+                score -= 0.2;
                 feedback.push('Try using more varied and sophisticated vocabulary.');
+            }
+
+            const hasVariedSentenceStarts = checkSentenceVariety(text);
+            if (hasVariedSentenceStarts) {
+                score += 0.3;
+                feedback.push('Excellent variety in sentence beginnings.');
+            } else {
+                score -= 0.1;
+                feedback.push('Try varying how you start your sentences.');
             }
 
             return {
@@ -573,48 +999,74 @@
             };
         }
 
-        function evaluateAccuracy(text) {
-            let score = 4;
-            let feedback = [];
+        function checkSentenceVariety(text) {
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const starts = sentences.map(s => s.trim().split(/\s+/)[0].toLowerCase());
+            const uniqueStarts = new Set(starts);
+            
+            return uniqueStarts.size / starts.length > 0.7;
+        }
 
-            const commonErrors = [
-                { pattern: /\bi\b/g, message: "Remember to capitalize 'I'" },
-                { pattern: /\s{2,}/g, message: "Check for extra spaces" },
-                { pattern: /[.!?]\s*[a-z]/g, message: "Capitalize after punctuation" },
-                { pattern: /\b(there|their|they're)\b/gi, message: "Check there/their/they're usage" },
-                { pattern: /\b(its|it's)\b/gi, message: "Check its/it's usage" }
+        function evaluateGrammarAndStyle(text) {
+            let score = 4.2;
+            let feedback = [];
+            let issues = [];
+
+            const grammarChecks = [
+                { pattern: /\balot\b/gi, suggestion: "a lot", severity: 0.15 },
+                { pattern: /\b(could of|should of|would of)\b/gi, suggestion: "could have/should have/would have", severity: 0.25 },
+                { pattern: /\b(your)\s+(going|coming|doing)\b/gi, suggestion: "you're", severity: 0.15 },
+                { pattern: /\b(loose)\s+(something|it|them)\b/gi, suggestion: "lose", severity: 0.1 },
+                { pattern: /\b(affect)\s+(on)\b/gi, suggestion: "effect on", severity: 0.15 },
+                { pattern: /[.!?]\s*[a-z]/g, suggestion: "Capitalize after punctuation", severity: 0.05 },
+                { pattern: /\bi\b/g, suggestion: "Remember to capitalize 'I'", severity: 0.05 },
+                { pattern: /\s{2,}/g, suggestion: "Check for extra spaces", severity: 0.02 },
+                { pattern: /\b(there|their|they're)\b.*\b(there|their|they're)\b/gi, suggestion: "Check there/their/they're usage", severity: 0.1 },
+                { pattern: /\b(its|it's)\b.*\b(its|it's)\b/gi, suggestion: "Check its/it's usage", severity: 0.1 }
             ];
 
-            let errorCount = 0;
-            commonErrors.forEach(error => {
-                const matches = text.match(error.pattern);
+            let totalErrors = 0;
+            grammarChecks.forEach(check => {
+                const matches = text.match(check.pattern);
                 if (matches) {
-                    errorCount += matches.length;
+                    const errorCount = matches.length;
+                    totalErrors += errorCount;
+                    score -= check.severity * errorCount;
+                    if (errorCount > 0) {
+                        issues.push(`${errorCount} instance(s) of ${check.suggestion.toLowerCase()}`);
+                    }
                 }
             });
 
-            if (errorCount === 0) {
-                feedback.push('Excellent accuracy with no obvious errors detected.');
-            } else if (errorCount <= 2) {
-                score -= 0.5;
-                feedback.push('Very good accuracy with minimal errors.');
-            } else if (errorCount <= 5) {
-                score -= 1;
+            if (totalErrors === 0) {
+                score += 0.3;
+                feedback.push('Outstanding accuracy with no obvious errors detected.');
+            } else if (totalErrors <= 1) {
+                score += 0.1;
+                feedback.push('Excellent accuracy with minimal errors.');
+            } else if (totalErrors <= 3) {
+                feedback.push('Very good accuracy with only minor errors.');
+            } else if (totalErrors <= 5) {
                 feedback.push('Good accuracy but check for some common errors.');
             } else {
-                score -= 2;
                 feedback.push('Several errors detected. Proofread carefully.');
             }
 
             const hasPunctuation = /[.!?]/.test(text);
             if (!hasPunctuation) {
-                score -= 1;
+                score -= 0.8;
                 feedback.push('Make sure to use proper punctuation.');
+            }
+
+            const hasSophisticatedPunctuation = /[;:,]/.test(text);
+            if (hasSophisticatedPunctuation) {
+                score += 0.2;
+                feedback.push('Good use of varied punctuation.');
             }
 
             return {
                 score: Math.max(1, Math.min(5, score)),
-                feedback: feedback.join(' ')
+                feedback: feedback.concat(issues).join(' ')
             };
         }
 
@@ -622,21 +1074,92 @@
             const advancedWords = [
                 'consequently', 'furthermore', 'nevertheless', 'substantial', 'significant',
                 'comprehensive', 'sophisticated', 'remarkable', 'exceptional', 'tremendous',
-                'magnificent', 'extraordinary', 'fascinating', 'intriguing', 'compelling'
+                'magnificent', 'extraordinary', 'fascinating', 'intriguing', 'compelling',
+                'essential', 'crucial', 'vital', 'fundamental', 'critical', 'beneficial',
+                'advantageous', 'detrimental', 'cognitive', 'globalized', 'interconnected',
+                'bilingual', 'prejudice', 'compulsory', 'opportunities', 'abilities'
             ];
 
             const intermediateWords = [
                 'however', 'therefore', 'although', 'because', 'important', 'interesting',
-                'beautiful', 'difficult', 'necessary', 'possible', 'different', 'various'
+                'beautiful', 'difficult', 'necessary', 'possible', 'different', 'various',
+                'wonderful', 'terrible', 'amazing', 'incredible', 'fantastic', 'excellent',
+                'develop', 'improve', 'understand', 'experience', 'knowledge', 'skills'
             ];
 
             const textLower = text.toLowerCase();
             const advancedCount = advancedWords.filter(word => textLower.includes(word)).length;
             const intermediateCount = intermediateWords.filter(word => textLower.includes(word)).length;
 
-            if (advancedCount >= 3) return 'advanced';
-            if (intermediateCount >= 5 || advancedCount >= 1) return 'intermediate';
+            if (advancedCount >= 4) return 'advanced';
+            if (intermediateCount >= 6 || advancedCount >= 2) return 'intermediate';
             return 'basic';
+        }
+
+        function evaluateReadability(text) {
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const words = text.split(/\s+/).length;
+            const syllables = estimateSyllables(text);
+            
+            if (sentences.length === 0) return 'Unable to calculate readability.';
+            
+            const fleschScore = 206.835 - (1.015 * (words / sentences.length)) - (84.6 * (syllables / words));
+            
+            let readabilityFeedback = '';
+            if (fleschScore > 70) {
+                readabilityFeedback = 'Text is very readable and clear.';
+            } else if (fleschScore > 50) {
+                readabilityFeedback = 'Good readability level for FCE.';
+            } else if (fleschScore > 30) {
+                readabilityFeedback = 'Text is fairly complex but appropriate for FCE level.';
+            } else {
+                readabilityFeedback = 'Text might be too complex - consider simplifying some sentences.';
+            }
+            
+            return readabilityFeedback;
+        }
+
+        function estimateSyllables(text) {
+            const words = text.toLowerCase().match(/[a-z]+/g) || [];
+            let totalSyllables = 0;
+            
+            words.forEach(word => {
+                let syllables = word.match(/[aeiouy]+/g) || [];
+                if (word.endsWith('e')) syllables.pop();
+                totalSyllables += Math.max(1, syllables.length);
+            });
+            
+            return totalSyllables || 1;
+        }
+
+        function generateDetailedAnalysis(criteria, text) {
+            const strengths = [];
+            const improvements = [];
+            
+            Object.entries(criteria).forEach(([key, criterion]) => {
+                if (criterion.score >= 4) {
+                    strengths.push(criterion.feedback);
+                } else if (criterion.score < 3) {
+                    improvements.push(criterion.feedback);
+                }
+            });
+            
+            const words = text.split(/\s+/).length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0).length;
+            
+            if (sentences > 0) {
+                const avgWordsPerSentence = words / sentences;
+                if (avgWordsPerSentence > 15) {
+                    strengths.push('Good use of detailed, complex sentences.');
+                }
+            }
+            
+            if (paragraphs >= 4) {
+                strengths.push('Well-structured with appropriate paragraph breaks.');
+            }
+            
+            return { strengths, improvements };
         }
 
         function getRecommendedWordCount(taskType) {
@@ -651,7 +1174,7 @@
         }
 
         function displayResults(evaluation) {
-            const { overallScore, criteria, wordCount, recommendedRange } = evaluation;
+            const { overallScore, criteria, wordCount, recommendedRange, readability, analysis } = evaluation;
             
             let scoreColor = '#fc8181';
             if (overallScore >= 4) scoreColor = '#68d391';
@@ -667,7 +1190,7 @@
                     <div class="criterion">
                         <div class="criterion-header">
                             <span class="criterion-name">Content & Task Achievement</span>
-                            <span class="criterion-score">${criteria.content.score}/5</span>
+                            <span class="criterion-score">${criteria.content.score.toFixed(1)}/5</span>
                         </div>
                         <div class="criterion-feedback ${getFeedbackClass(criteria.content.score)}">
                             ${criteria.content.feedback}
@@ -677,7 +1200,7 @@
                     <div class="criterion">
                         <div class="criterion-header">
                             <span class="criterion-name">Organization & Structure</span>
-                            <span class="criterion-score">${criteria.organization.score}/5</span>
+                            <span class="criterion-score">${criteria.organization.score.toFixed(1)}/5</span>
                         </div>
                         <div class="criterion-feedback ${getFeedbackClass(criteria.organization.score)}">
                             ${criteria.organization.feedback}
@@ -687,7 +1210,7 @@
                     <div class="criterion">
                         <div class="criterion-header">
                             <span class="criterion-name">Language Use & Range</span>
-                            <span class="criterion-score">${criteria.language.score}/5</span>
+                            <span class="criterion-score">${criteria.language.score.toFixed(1)}/5</span>
                         </div>
                         <div class="criterion-feedback ${getFeedbackClass(criteria.language.score)}">
                             ${criteria.language.feedback}
@@ -697,10 +1220,42 @@
                     <div class="criterion">
                         <div class="criterion-header">
                             <span class="criterion-name">Grammar & Accuracy</span>
-                            <span class="criterion-score">${criteria.accuracy.score}/5</span>
+                            <span class="criterion-score">${criteria.accuracy.score.toFixed(1)}/5</span>
                         </div>
                         <div class="criterion-feedback ${getFeedbackClass(criteria.accuracy.score)}">
                             ${criteria.accuracy.feedback}
+                        </div>
+                    </div>
+
+                    <div class="criterion">
+                        <div class="criterion-header">
+                            <span class="criterion-name">Task-Specific Elements</span>
+                            <span class="criterion-score">${criteria.taskSpecific.score.toFixed(1)}/5</span>
+                        </div>
+                        <div class="criterion-feedback ${getFeedbackClass(criteria.taskSpecific.score)}">
+                            ${criteria.taskSpecific.feedback}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="readability-info">
+                    <h4 style="color: #bee3f8; margin-bottom: 8px;">📖 Readability Analysis</h4>
+                    <p style="color: #bee3f8; font-size: 0.9rem;">${readability}</p>
+                </div>
+
+                <div class="detailed-feedback">
+                    <div class="strength-weakness-grid">
+                        <div class="strengths">
+                            <h4>✓ Strengths</h4>
+                            <ul id="strengthsList">
+                                ${analysis.strengths.map(strength => `<li>${strength}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="improvements">
+                            <h4>⚠ Areas for Improvement</h4>
+                            <ul id="improvementsList">
+                                ${analysis.improvements.map(improvement => `<li>${improvement}</li>`).join('')}
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -713,9 +1268,15 @@
                         ${getGeneralRecommendations(evaluation)}
                     </div>
                 </div>
+
+                <div class="export-section">
+                    <button class="export-btn" onclick="exportResults()">📄 Export Results</button>
+                    <button class="export-btn" onclick="shareResults()">🔗 Share Results</button>
+                </div>
             `;
 
             results.innerHTML = resultsHTML;
+            displayProgressChart();
         }
 
         function getFeedbackClass(score) {
@@ -736,35 +1297,173 @@
                 recommendations.push('Keep practicing! Focus on the areas highlighted above for improvement.');
             }
 
-            const lowestScore = Math.min(
-                criteria.content.score,
-                criteria.organization.score,
-                criteria.language.score,
-                criteria.accuracy.score
-            );
+            const scores = Object.values(criteria).map(c => c.score);
+            const lowestScore = Math.min(...scores);
+            const highestScore = Math.max(...scores);
 
-            if (criteria.content.score === lowestScore) {
-                recommendations.push('Focus on developing your ideas more fully and meeting task requirements.');
+            if (highestScore - lowestScore > 1.5) {
+                recommendations.push('Focus on balancing all criteria - some areas are much stronger than others.');
             }
-            if (criteria.organization.score === lowestScore) {
-                recommendations.push('Work on structuring your writing with clear paragraphs and transitions.');
-            }
-            if (criteria.language.score === lowestScore) {
-                recommendations.push('Expand your vocabulary and try using more complex sentence structures.');
-            }
-            if (criteria.accuracy.score === lowestScore) {
-                recommendations.push('Proofread carefully and review grammar rules to reduce errors.');
-            }
+
+            const lowestCriteria = Object.entries(criteria).filter(([key, criterion]) => criterion.score === lowestScore);
+            
+            lowestCriteria.forEach(([key, criterion]) => {
+                switch(key) {
+                    case 'content':
+                        recommendations.push('Focus on developing your ideas more fully and meeting task requirements.');
+                        break;
+                    case 'organization':
+                        recommendations.push('Work on structuring your writing with clear paragraphs and transitions.');
+                        break;
+                    case 'language':
+                        recommendations.push('Expand your vocabulary and try using more complex sentence structures.');
+                        break;
+                    case 'accuracy':
+                        recommendations.push('Proofread carefully and review grammar rules to reduce errors.');
+                        break;
+                    case 'taskSpecific':
+                        recommendations.push('Pay closer attention to the specific requirements of this writing task.');
+                        break;
+                }
+            });
 
             return recommendations.join(' ');
         }
 
-        const loadSampleButton = document.getElementById('loadSample');
-        
-        loadSampleButton.addEventListener('click', loadSampleText);
+                function saveResults(evaluation) {
+            const results = JSON.parse(localStorage.getItem('gradingHistory') || '[]');
+            results.push({
+                date: new Date().toISOString(),
+                taskType: taskType.value,
+                score: evaluation.overallScore,
+                wordCount: evaluation.wordCount,
+                criteria: evaluation.criteria
+            });
+            
+            if (results.length > 10) results.shift();
+            
+            localStorage.setItem('gradingHistory', JSON.stringify(results));
+        }
 
-        function loadSampleText() {
-            const sampleReview = `A film that didn't disappoint me
+        function displayProgressChart() {
+            const history = JSON.parse(localStorage.getItem('gradingHistory') || '[]');
+            if (history.length < 2) return;
+            
+            const chartContainer = document.createElement('div');
+            chartContainer.className = 'progress-chart';
+            chartContainer.innerHTML = `
+                <h3 style="color: #f7fafc; margin-bottom: 15px;">📈 Your Progress</h3>
+                <div class="chart-line">
+                    ${history.slice(-5).map((result, index) => `
+                        <div class="bar" style="height: ${result.score * 20}px;" title="Score: ${result.score}/5 (${new Date(result.date).toLocaleDateString()})"></div>
+                    `).join('')}
+                </div>
+                <p style="color: #a0aec0; margin-top: 10px; font-size: 0.9rem;">Last 5 attempts • Hover over bars for details</p>
+                <div style="margin-top: 15px;">
+                    <p style="color: #cbd5e0; font-size: 0.9rem;">
+                        Average score: ${(history.reduce((sum, r) => sum + r.score, 0) / history.length).toFixed(1)}/5
+                        ${history.length > 1 ? ` • Trend: ${getTrend(history)}` : ''}
+                    </p>
+                </div>
+            `;
+            
+            results.appendChild(chartContainer);
+        }
+
+        function getTrend(history) {
+            if (history.length < 2) return 'Not enough data';
+            
+            const recent = history.slice(-3);
+            const older = history.slice(-6, -3);
+            
+            if (older.length === 0) return 'Improving';
+            
+            const recentAvg = recent.reduce((sum, r) => sum + r.score, 0) / recent.length;
+            const olderAvg = older.reduce((sum, r) => sum + r.score, 0) / older.length;
+            
+            if (recentAvg > olderAvg + 0.2) return '📈 Improving';
+            if (recentAvg < olderAvg - 0.2) return '📉 Declining';
+            return '➡️ Stable';
+        }
+
+        function exportResults() {
+            if (!lastEvaluation) {
+                showNotification('No results to export. Please grade some writing first.');
+                return;
+            }
+            
+            const exportData = {
+                text: writingText.value,
+                taskType: taskType.value,
+                evaluation: lastEvaluation,
+                timestamp: new Date().toISOString(),
+                version: '2.0'
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `fce-writing-evaluation-${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            URL.revokeObjectURL(url);
+            showNotification('Results exported successfully!');
+        }
+
+        function shareResults() {
+            if (!lastEvaluation) {
+                showNotification('No results to share. Please grade some writing first.');
+                return;
+            }
+            
+            const shareText = `FCE Writing Evaluation Results:
+📝 Task: ${taskType.value.charAt(0).toUpperCase() + taskType.value.slice(1)}
+📊 Overall Score: ${lastEvaluation.overallScore}/5
+📄 Word Count: ${lastEvaluation.wordCount}
+
+Breakdown:
+• Content: ${lastEvaluation.criteria.content.score.toFixed(1)}/5
+• Organization: ${lastEvaluation.criteria.organization.score.toFixed(1)}/5
+• Language: ${lastEvaluation.criteria.language.score.toFixed(1)}/5
+• Accuracy: ${lastEvaluation.criteria.accuracy.score.toFixed(1)}/5
+• Task-Specific: ${lastEvaluation.criteria.taskSpecific.score.toFixed(1)}/5
+
+Generated by FCE Writing Grader`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'FCE Writing Evaluation Results',
+                    text: shareText
+                }).then(() => {
+                    showNotification('Results shared successfully!');
+                }).catch(() => {
+                    fallbackShare(shareText);
+                });
+            } else {
+                fallbackShare(shareText);
+            }
+        }
+
+        function fallbackShare(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Results copied to clipboard!');
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showNotification('Results copied to clipboard!');
+            });
+        }
+
+        const sampleTexts = {
+        review: `A film that didn't disappoint me
 
 How often have you been to the cinema to see a film you were really looking forward to, only to be disappointed with some aspect of it? Well, I saw "The House in the Forest" last week and it completely lived up to my expectations.
 
@@ -772,14 +1471,193 @@ It was about a family who lived in the middle of nowhere, and the strange things
 
 The best part was the ending. I won't tell you what happened because I wouldn't want to spoil it, but it was totally unexpected, and yet strangely seemed to be completely logical as well. I left the cinema feeling that I had watched a very good story and that the ending had been memorable and satisfying.
 
-If you enjoy films that have strong stories and some frightening elements, you will really enjoy this!`;
+If you enjoy films that have strong stories and some frightening elements, you will really enjoy this!`,
 
-            writingText.value = sampleReview;
-            taskType.value = 'review';
+        essay: `DEVELOPMENT VS ENVIRONMENT
+
+If we surf the web looking for pollution and environmental catastrophes, we will find out that every country in the world suffers them. This is a natural consequence of the struggle between development and environment.
+
+If a country decided to live isolated from the rest of the world, living on what it can naturally grow and produce, it surely wouldn’t be highly polluted. But we all want exotic food and technological items from all over the world, so we have to pay the price.
+
+Investing on electrical transport would benefit the environment a lot. Even more if this electricity came from a natural source of energy like wind, rivers and solar boards. It’s difficult to achieve this because petrol companies will fight against these actions.
+
+We also have to take care of our rivers and seas. We all have heard about factories throwing highly toxic substances to rivers, without minimizing their poisoning effects. A really strict law should be applied to fine these factories and make them change their policy.
+
+But what about ourselves? We also can do a lot! If, when possible, we bought larger packs of food, we would be producing less rubbish. And this is only an example!`,
+
+        story: `She smiled and walked away
+
+Although I wasn’t feeling well, somehow I managed to get onto the tram to work. Rather foolishly, I’d cooked some food the previous night with an old sauce which had gone off. Now I was paying the price. I’d seen there was a little mould on top of the carrots I was eating yet this Australian attitude came across me:
+
+“She’ll be right.”
+
+So I kept on eating. I should have known that something was up when I felt a little dizzy. On the tram I felt faint. Things got worse when the tram was re-routed about 5 minutes’ walk from the school. Damn.
+
+As I was getting off, a girl came up to me.
+
+“Do you remember me?”
+
+I thought it was Pavla, a student of mine, joking about her absence the week before.
+
+“Sorry, not feeling well. I may have to cancel today’s lesson.”
+
+“But..you taught me 5 or so years ago. Don’t you remember?” Now I was delirious. But I did remember, slowly. It wasn’t Pavla.
+
+Looking a little perplexed, Aneta pointed in the direction of the school. Then she smiled and walked away.`,
+
+        article: `The most useful thing I have ever learned
+
+The most useful thing i have learned is surely speaking English. I’ve been studing English for nine years till now. I used to take regular classes in these language which i found very interesting. Also, i learn English in school, my teacher is awesome but strict, so i have to study constantly. But most of all, i learn English, watching movies, TV shows. Allso cartoons when i was younger. When i came across a movie which was subtitled i turned the subtitle off. I enjoy wathing TV and movies on English.
+
+English is the most spoken language across the world. It is studied all over the world. In order to get in a conversation with a stranger from other country, you need to speak English. I’m a swimmer, so i go on competissions in many countries, and in all of those countries i speak English. I want to study abroad when i finish highschool, so i’ll defenetly need English.
+
+All in all, i enjoy speaking it, writing it, and I’m very glad I got to learn it, i find it very useful.`,
+
+        email: `Dear David,
+
+I’m glad your friends are visiting my area soon for a week’s touring holiday. I have many ideas what I can show them and tell about.
+
+In my opinion the best way to travel around will be by bike because of small distances between the places and views are amazing.
+
+My area includes also beautiful Baltic Sea which many tourist visit especially in summer. Your friends could sunbath or swim if they would like but the water is quite cold in this season. Beautiful sightseeing of sunrise is the best memorise!
+
+You wrote that they are intrested in history of my local area. That’s great! We have museum of our local history where I can go with them. Tickets are not so expensive and I can think about some discount.
+
+What do you think about it? Would you mind send me some your ideas?
+
+I look forward to hearing from you soon.
+
+Best wishes,
+Sam`
+        };
+
+        const sampleSelector = document.getElementById('sampleSelector');
+        const loadSampleButton = document.getElementById('loadSample');
+
+        loadSampleButton.addEventListener('click', loadSampleText);
+
+        function loadSampleText() {
+            const selectedSample = sampleSelector.value;
+            
+            if (!selectedSample) {
+                showNotification('Please select a sample from the dropdown first.');
+                return;
+            }
+            
+            writingText.value = sampleTexts[selectedSample];
+            taskType.value = selectedSample;
             updateWordCount();
+            showNotification(`Sample ${selectedSample} loaded! Click "Grade My Writing" to see evaluation.`);
+            
+            // Reset selector
+            sampleSelector.value = '';
         }
 
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        if (!gradeButton.disabled) {
+                            gradeWriting();
+                        }
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        if (lastEvaluation) {
+                            exportResults();
+                        }
+                        break;
+                    case 'l':
+                        e.preventDefault();
+                        loadSampleText();
+                        break;
+                }
+            }
+        });
+
+        let saveTimer;
+        writingText.addEventListener('input', function() {
+            clearTimeout(saveTimer);
+            saveTimer = setTimeout(() => {
+                if (writingText.value.trim().length > 0) {
+                    localStorage.setItem('writingDraft', writingText.value);
+                    localStorage.setItem('draftTaskType', taskType.value);
+                }
+            }, 1000);
+        });
+
+        window.addEventListener('load', function() {
+            const draft = localStorage.getItem('writingDraft');
+            const draftTaskType = localStorage.getItem('draftTaskType');
+            
+            if (draft && draft.trim().length > 0) {
+                const loadDraft = confirm('Found a saved draft. Would you like to load it?');
+                if (loadDraft) {
+                    writingText.value = draft;
+                    if (draftTaskType) {
+                        taskType.value = draftTaskType;
+                    }
+                    updateWordCount();
+                    showNotification('Draft loaded successfully!');
+                }
+            }
+        });
+
+        function clearDraft() {
+            localStorage.removeItem('writingDraft');
+            localStorage.removeItem('draftTaskType');
+        }
+
+        const originalExportResults = exportResults;
+        exportResults = function() {
+            originalExportResults();
+            clearDraft();
+        };
+
         updateWordCount();
+
+        function addTooltips() {
+            const tooltips = {
+                'taskType': 'Select the type of writing task you want to evaluate',
+                'writingText': 'Paste or type your writing here. Aim for 140-190 words for FCE level.',
+                'gradeButton': 'Keyboard shortcut: Ctrl+Enter (Cmd+Enter on Mac)'
+            };
+
+            Object.entries(tooltips).forEach(([id, text]) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.title = text;
+                }
+            });
+        }
+
+        addTooltips();
+
+        let startTime;
+        const originalGradeWriting = gradeWriting;
+        gradeWriting = function() {
+            startTime = performance.now();
+            originalGradeWriting();
+        };
+
+        const originalDisplayResults = displayResults;
+        displayResults = function(evaluation) {
+            originalDisplayResults(evaluation);
+            const endTime = performance.now();
+            const processingTime = Math.round(endTime - startTime);
+            
+            const processingInfo = document.createElement('div');
+            processingInfo.style.cssText = 'margin-top: 15px; padding: 10px; background: #2d3748; border-radius: 6px; font-size: 0.8rem; color: #a0aec0; text-align: center;';
+            processingInfo.innerHTML = `Analysis completed in ${processingTime}ms • ${evaluation.wordCount} words processed`;
+            results.appendChild(processingInfo);
+        };
+
+        const versionInfo = document.createElement('div');
+        versionInfo.style.cssText = 'position: fixed; bottom: 10px; right: 10px; font-size: 0.7rem; color: #4a5568; z-index: 1000;';
+        versionInfo.textContent = 'FCE Grader v2.1';
+        document.body.appendChild(versionInfo);
+
     </script>
 </body>
 </html>
